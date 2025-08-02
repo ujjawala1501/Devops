@@ -1,0 +1,80 @@
+
+Following Svinder Puris Roadmap 
+https://youtu.be/VuRZVevLAXc?si=eZrQ1ocQAwxuP5bY
+
+## Week 1: Foundations + Java Web App Deployment Directly on EC2
+
+**Day 1–2: Understand DevOps & Setup EC2 Environment**
+
+- Read/watch what DevOps means and roles of a DevOps engineer.
+- Launch an AWS Free Tier EC2 instance (Amazon Linux 2 or Ubuntu).
+- Configure Security Groups: SSH (22), HTTP (8080).
+- SSH into EC2 and install essential tools: Java JDK (8 or 11), Git, wget, curl, vim/nano.
+- Install Apache Tomcat on EC2, start it, and verify access via browser.
+
+**Day 3–4: Build and Deploy Java Web App on EC2**
+
+- Directly on EC2, create a simple Java servlet or JSP application source folder (use vim/nano for editing).
+- Use command-line tools (Maven or manual javac/jar) on EC2 to build your WAR file.
+- Deploy the WAR file to Tomcat’s webapps directory on EC2.
+- Access the app through `http://<EC2-Public-IP>:8080/<app-name>`.
+- Document all steps, challenges, and fixes for LinkedIn.
+
+**Day 5–7: Git on EC2 and Basic App Versioning**
+
+- Initialize a Git repository on EC2, commit your Java app code.
+- Push/pull the code to/from GitHub directly from EC2.
+- Practice basic Git workflows: clone, commit, push, pull, branch commands on EC2.
+- Optional: Set up SSH keys on EC2 for GitHub authentication.
+- Write a detailed LinkedIn post summarizing your EC2-based development and deployment experience.
+
+## Week 2: CI/CD Automation & Environment Management on EC2
+
+**Day 8–10: Set up Jenkins CI Server on EC2**
+
+- Install Jenkins on the same or another EC2 instance.
+- Configure Jenkins to pull your Java app code from GitHub.
+- Create jobs/pipelines to build the WAR automatically on EC2 and deploy to Tomcat.
+- Setup dev and QA Tomcat instances on separate EC2 ports or instances for environment segregation.
+- Add Jenkins stage gates for dev → QA deployment transitions.
+
+**Day 11–13: Automated Testing & Quality Checks**
+
+- Write simple JUnit test cases in your Java app code.
+- Integrate Jenkins with JUnit plugin to run tests during builds.
+- Setup SonarQube locally on EC2 or use SonarCloud to scan code quality as part of Jenkins pipeline.
+- Document all CI/CD setup, automation benefits, and troubleshooting on LinkedIn.
+
+**Day 14: Troubleshooting & Optimization**
+
+- Practice debugging common Jenkins/Tomcat/EC2 issues.
+- Tune EC2 instance, JVM options, and Tomcat config for performance.
+- Reflect and post learnings and tips on LinkedIn.
+
+## Week 3: Containerization, Infrastructure as Code & Kubernetes on AWS
+
+**Day 15–17: Dockerize Jenkins & Tomcat on EC2**
+
+- Install Docker on EC2.
+- Create Dockerfiles for Jenkins and Tomcat.
+- Build and run Jenkins and Tomcat containers on EC2, linking them as needed.
+- Migrate your Java app deployment inside Tomcat Docker container.
+- Share containerization benefits and challenges on LinkedIn.
+
+**Day 18–19: Infrastructure as Code with Terraform**
+
+- Install Terraform on your local machine or EC2.
+- Write Terraform scripts to provision EC2 instances, security groups, IAM roles to automate your infrastructure.
+- Use Terraform to spin up Jenkins and Tomcat EC2 instances and Docker as needed.
+- Post your Terraform journey progress and reflect on IaC advantages.
+
+**Day 20–21: Introduction to Kubernetes & AWS EKS**
+
+- Learn Kubernetes basics (pods, services, deployments) through AWS EKS or local tools (if time permits).
+- Deploy your containerized Java app to EKS.
+- Integrate Jenkins pipeline to deploy automatically to Kubernetes.
+- Share your Kubernetes journey and future learning goals on LinkedIn.
+
+## Daily LinkedIn Posting Format (aligned with your goal):
+
+---
