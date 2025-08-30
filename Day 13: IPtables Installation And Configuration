@@ -22,6 +22,8 @@ curl http://<app-server-IP>:6100
 
 Commands with explanation for my reference
 ********************************************************************************************
+- `ip addr show `
+  To get the ip addresses in current server
 ### Installation and Service Management
 - `sudo yum install -y iptables-services`  
   Installs iptables and the service to make rules persistent across reboots.
