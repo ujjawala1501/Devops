@@ -20,6 +20,8 @@ chmod +x secure_apache_6100.sh
 curl http://<app-server-IP>:6100
 *******************************************************************************************
 
+Commands with explanation for my reference
+********************************************************************************************
 ### Installation and Service Management
 - `sudo yum install -y iptables-services`  
   Installs iptables and the service to make rules persistent across reboots.
