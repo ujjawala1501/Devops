@@ -5,8 +5,8 @@ sudo iptables -F
 sudo iptables -P INPUT ACCEPT
 sudo iptables -A INPUT -i lo -j ACCEPT
 sudo iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
-sudo iptables -A INPUT -p tcp --dport 6100 -s 172.16.238.14 -j ACCEPT
-sudo iptables -A INPUT -p tcp --dport 6100 -j DROP
+sudo iptables -A INPUT -p tcp --dport 8087 -s 172.16.238.14 -j ACCEPT
+sudo iptables -A INPUT -p tcp --dport 8087 -j DROP
 sudo iptables -A INPUT -p tcp --dport 22 -j ACCEPT
 sudo iptables -A INPUT -j DROP
 
@@ -14,9 +14,11 @@ sudo service iptables save
 sudo systemctl enable iptables
 sudo systemctl start iptables
 
-chmod +x secure_apache_6100.sh
-./secure_apache_6100.sh
+chmod +x task_8087.sh
+./task_8087.sh
 
+To copy into other servers 
+scp task_8087.sh tony@stapp01:/tmp/   (tmp is the folder where script will be saved)
 curl http://<app-server-IP>:6100
 *******************************************************************************************
 
