@@ -1,5 +1,6 @@
 All Commands from Task script
-******************************************************************************************
+****************************************************************** vi task_8087.sh
+#!/bin/bash
 sudo yum install -y iptables-services
 sudo iptables -F
 sudo iptables -P INPUT ACCEPT
@@ -13,14 +14,16 @@ sudo iptables -A INPUT -j DROP
 sudo service iptables save
 sudo systemctl enable iptables
 sudo systemctl start iptables
-
-chmod +x task_8087.sh
-./task_8087.sh
-
-To copy into other servers 
-scp task_8087.sh tony@stapp01:/tmp/   (tmp is the folder where script will be saved)
-curl http://<app-server-IP>:6100
-*******************************************************************************************
+********************************* esc>:wq!
+bash
+  chmod +x task_8087.sh
+  ./task_8087.sh
+*********************************
+To copy into other servers :
+  scp task_8087.sh tony@stapp01:/tmp/   (tmp is the folder where script will be saved)
+To check the fix :  
+  curl http://<app-server-IP>:6100
+**********************************************************************
 
 Commands with explanation for my reference
 ********************************************************************************************
