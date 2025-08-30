@@ -1,0 +1,116 @@
+All Commands from Task script
+******************************************************************************************
+sudo yum install -y iptables-services
+sudo iptables -F
+sudo iptables -P INPUT ACCEPT
+sudo iptables -A INPUT -i lo -j ACCEPT
+sudo iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+sudo iptables -A INPUT -p tcp --dport 6100 -s 172.16.238.14 -j ACCEPT
+sudo iptables -A INPUT -p tcp --dport 6100 -j DROP
+sudo iptables -A INPUT -p tcp --dport 22 -j ACCEPT
+sudo iptables -A INPUT -j DROP
+
+sudo service iptables save
+sudo systemctl enable iptables
+sudo systemctl start iptables
+
+chmod +x secure_apache_6100.sh
+./secure_apache_6100.sh
+
+curl http://<app-server-IP>:6100
+*******************************************************************************************
+
+### Installation and Service Management
+- `sudo yum install -y iptables-services`  
+  Installs iptables and the service to make rules persistent across reboots.
+
+- `sudo service iptables save`  
+  Saves current iptables rules to a file so they persist after reboot.
+
+- `sudo systemctl enable iptables`  
+  Enables iptables service to start at boot.
+
+- `sudo systemctl start iptables`  
+  Starts the iptables firewall immediately.
+
+### Adding, Flushing, and Setting Policies (From Your Script)
+- `sudo iptables -F`  
+  Flushes (clears) all existing iptables rules.
+
+- `sudo iptables -P INPUT ACCEPT`  
+  Sets the default policy for the INPUT chain to ACCEPT (allow all unless specified).
+
+- `sudo iptables -A INPUT -i lo -j ACCEPT`  
+  Allows all traffic on the loopback interface (localhost).
+
+- `sudo iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT`  
+  Allows incoming traffic related to or part of established connections.
+
+- `sudo iptables -A INPUT -p tcp --dport 6100 -s 172.16.238.14 -j ACCEPT`  
+  Allows TCP traffic on port 6100 only from specific IP (e.g., Load Balancer host).
+
+- `sudo iptables -A INPUT -p tcp --dport 6100 -j DROP`  
+  Blocks TCP traffic on port 6100 from all other IPs.
+
+- `sudo iptables -A INPUT -p tcp --dport 22 -j ACCEPT`  
+  Allows SSH connections on port 22 (important for remote access).
+
+- `sudo iptables -A INPUT -j DROP`  
+  Drops all other incoming traffic that doesn’t match earlier rules.
+
+### Running and Deploying Scripts
+- `chmod +x secure_apache_6100.sh`  
+  Makes your iptables script executable.
+
+- `./secure_apache_6100.sh`  
+  Runs the iptables setup script.
+
+- `curl http://<app-server-IP>:6100`  
+  Tests whether port 6100 is accessible from the client side.
+
+***
+
+### Additional Important iptables Commands
+
+- `sudo iptables -L`  
+  Lists all current firewall rules.
+
+- `sudo iptables -L -v -n`  
+  Lists detailed rules with packet and byte counts, showing numeric IPs and ports.
+
+- `sudo iptables -S`  
+  Shows rules in a format suitable for scripting.
+
+- `sudo iptables -L INPUT -n --line-numbers`  
+  Lists INPUT chain rules with line numbers (used for deleting specific rules).
+
+- `sudo iptables -X`  
+  Deletes all user-defined chains.
+
+- `sudo iptables -D INPUT 3`  
+  Deletes rule at position 3 in INPUT chain.
+
+- `sudo iptables -D INPUT -s 192.168.1.100 -j DROP`  
+  Deletes a rule blocking specific IP.
+
+- `sudo iptables -A INPUT -p tcp --dport 80 -j ACCEPT`  
+  Adds a rule allowing HTTP traffic.
+
+- `sudo iptables -I INPUT 1 -p tcp --dport 22 -j ACCEPT`  
+  Inserts a rule to allow SSH at the top of the INPUT chain.
+
+- `sudo iptables -P INPUT DROP`  
+  Sets default policy for INPUT to DROP (recommended for better security).
+
+- `sudo iptables-restore < /etc/sysconfig/iptables`  
+  Restores firewall rules saved in the configuration file.
+
+- `sudo iptables -A INPUT -s 203.0.113.50 -j DROP`  
+  Blocks all traffic from a specific IP.
+
+- `sudo iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT`  
+  Allows packets related to established connections to pass.
+
+- `sudo iptables -t nat -L -n`  
+  Lists rules in the NAT table (commonly used for port forwarding).
+
