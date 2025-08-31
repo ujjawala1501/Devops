@@ -1,0 +1,15 @@
+curl: Checks if a server is responding on a specific port.
+
+ssh: Connects remotely to a server for management.
+
+sudo systemctl enable/start/status/restart: Manages Apache service state.
+
+journalctl -xe: Shows detailed system logs for troubleshooting.
+
+sudo journalctl -u httpd --no-pager | tail -30: Views recent Apache logs to identify issues.
+
+sudo ss -tulnp | grep :3000: Finds the process listening on port 3000.
+
+sudo netstat -tulnp | grep :6400: Identifies the conflicting process by port.
+
+sudo kill [PID] or sudo systemctl stop/disable [service]: Stops and disables conflicting services.
