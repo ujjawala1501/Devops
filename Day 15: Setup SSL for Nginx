@@ -1,0 +1,30 @@
+# 🔐 Nginx + SSL Setup on CentOS
+
+A simple hands-on exercise to install and configure Nginx with a self-signed SSL certificate on a CentOS Stream server.
+
+## 🛠️ Steps Covered
+
+1. Install Nginx using `yum`
+2. Move existing SSL cert and key to `/etc/nginx/ssl/`
+3. Configure Nginx to serve HTTPS
+4. Add `index.html` with "Welcome!" message
+5. Test the setup using `curl -Ik https://<server-ip>`
+
+## 🗂️ Files Included
+
+- `nginx.conf` — Sample HTTPS server block
+- `index.html` — Basic web page content
+- `setup.sh` *(optional)* — Script to automate steps
+
+## 🚀 Commands Used
+
+```bash
+sudo yum install nginx
+sudo mkdir -p /etc/nginx/ssl
+sudo mv /tmp/nautilus.crt /etc/nginx/ssl/
+sudo mv /tmp/nautilus.key /etc/nginx/ssl/
+sudo vi /etc/nginx/nginx.conf
+echo "Welcome!" | sudo tee /usr/share/nginx/html/index.html
+sudo nginx -t
+sudo systemctl start nginx
+sudo curl -Ik https://<server-ip>
