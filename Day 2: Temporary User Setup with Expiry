@@ -27,3 +27,7 @@ If account password is required, set it with:
 
 bash
 sudo passwd jim
+
+
+IF WANT TO DELETE THE USER :
+sudo userdel jim
