@@ -2,6 +2,7 @@ Following security audits, the xFusionCorp Industries security team has rolled o
 Your task is to disable direct SSH root login on all app servers within the Stratos Datacenter.
 
 solution:
+ssh tony@<IP address / hostname >  (repeat the same commands for other 2 app servers as well)
 To disable direct SSH root login in Linux, the following steps are required: Edit the SSH configuration file.
 Open the SSH daemon configuration file, typically located at /etc/ssh/sshd_config, using a text editor with root privileges. For example:
 Code
