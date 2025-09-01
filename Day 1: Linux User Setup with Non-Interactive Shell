@@ -1,0 +1,19 @@
+To accommodate the backup agent tool's specifications, the system admin team at xFusionCorp Industries requires the creation of a user with a non-interactive shell. Here's your task:
+Create a user named mariyam with a non-interactive shell on App Server 2.
+
+Solution
+
+sudo useradd -s /sbin/nologin mariyam
+
+Breakdown:
+useradd — command to add a user
+-s /sbin/nologin — assigns a non-interactive shell, meaning the user can't log in interactively (ideal for system users or services)
+
+To check : 
+grep mariyam /etc/passwd
+
+
+Use Case for other options 	                             Recommended Shell
+Prevent user logins gracefully        	                /sbin/nologin or /usr/sbin/nologin
+Strictest no-login with no message	                    /bin/false
+Portable script for multiple distros	                  Check if /sbin/nologin exists, fallback to /bin/false
