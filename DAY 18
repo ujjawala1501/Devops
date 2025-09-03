@@ -1,12 +1,153 @@
-Installation Steps
-Install MariaDB server package:
+TASK 
+As part of a recent task at xFusionCorp (Stratos DC), I was responsible for deploying a WordPress application with a customized infrastructure setup. Here's a quick overview of the work completed:
 
-text
-sudo dnf install mariadb-server -y   (SUDO YUM DID NOT WORK)
-This installs MariaDB server along with dependencies.
+🧱 Installed and configured Apache, PHP, and required dependencies across all app hosts.
+🌐 Configured Apache to run on custom port 8089.
+🗄️ Set up and configured MariaDB on the DB server.
+🛠️ Created a new database kodekloud_db9 and a fully-privileged user kodekloud_aim with secure credentials.
+📁 Ensured proper NFS mount of /var/www/html from the central storage server.
+✅ Verified the deployment through LBR with successful DB connectivity by WordPress.
+******************************************
+FOR DB SERVER (peter)
+***
 
-Start and enable the MariaDB service:
+## MariaDB Server Installation on CentOS Stream 9
 
-text
-sudo systemctl start mariadb
-sudo systemctl enable mariadb
+### Initial SSH and Root Access
+- SSH into the target server using:
+  ```
+  ssh peter@stdb01.stratos.xfusioncorp.com
+  ```
+- Switch to root user with:
+  ```
+  sudo su -
+  ```
+- A reminder about responsible use of root privileges appears.
+
+### Installing MariaDB Server Package
+- Use `dnf` to install `mariadb-server` which pulls dependencies:
+  ```
+  sudo dnf install mariadb-server -y   (SUDO YUM DID NOT WORK)
+  ```
+- Multiple Perl and MariaDB related packages are installed as dependencies.
+- Installation includes:
+  - `mariadb-server` binary and utilities
+  - `mariadb-backup`
+  - Perl modules needed by MariaDB
+
+### MariaDB Service Management
+- Attempting to enable `mariadb-server.service` fails because no such service file exists.
+- The correct service name for systemctl is `mariadb` (not `mariadb-server`).
+- Start and enable the MariaDB service with:
+  ```
+  sudo systemctl start mariadb
+  sudo systemctl enable mariadb
+  ```
+- Enabling `mariadb` creates symlinks for `mysql.service` and `mysqld.service`.
+
+### Accessing MariaDB Shell
+- Connect to MariaDB as root without a password (assuming no password set yet):
+  ```
+  sudo mysql -u root
+  ```
+- MariaDB prompt shows server version and welcome message.
+
+### Creating Database and User
+- Create a database:
+  ```sql
+  CREATE DATABASE kodekloud_db1;
+  ```
+- Create a user restricted to local connections:
+  ```sql
+  CREATE USER 'kodekloud_joy'@'localhost' IDENTIFIED BY 'Rc5C9EyvbU';
+  ```
+- Grant all privileges on database to user:
+  ```sql
+  GRANT ALL PRIVILEGES ON kodekloud_db1.* TO 'kodekloud_joy'@'localhost';
+  ```
+- Create a user for remote access:
+  ```sql
+  CREATE USER 'kodekloud_joy'@'%' IDENTIFIED BY 'Rc5C9EyvbU';
+  GRANT ALL PRIVILEGES ON kodekloud_db1.* TO 'kodekloud_joy'@'%';
+  ```
+- Flush privileges or verify users with:
+  ```sql
+  select user,host from mysql.user;
+  ```
+
+*************************************************************************************
+
+For App servers stapp01,stapp02,stapp03 
+
+***
+
+## PHP Installation and Configuration on CentOS Stream 9
+
+### Initial SSH and Root Access
+- SSH into the application server:
+  ```
+  ssh banner@stapp03.stratos.xfusioncorp.com
+  ```
+- Switch to root user:
+  ```
+  sudo su -
+  ```
+
+### Installing PHP and Required Modules
+- Use `dnf` to install PHP and common modules needed for web applications including:
+  - `php`, `php-cli`, `php-common`, `php-mysqlnd`, `php-fpm`, `php-gd`, `php-mbstring`, `php-xml`, `php-opcache`, `php-pdo`
+- Command used:
+  ```
+  sudo dnf install php php-cli php-common php-mysqlnd php-fpm php-gd php-mbstring -y
+  ```
+- This installs PHP 8.0.30 and its dependencies, plus required libraries such as `libpng`, `freetype`, `httpd-core`, `gd`, etc.
+
+### Apache Web Server Setup
+- Apache HTTPD was already installed:
+  ```
+  yum install httpd -y
+  ```
+- Enable and start Apache service:
+  ```
+  systemctl enable httpd
+  systemctl start httpd
+  ```
+
+### PHP-FPM Service Management
+- `php-fpm` service was enabled and started:
+  ```
+  systemctl enable php-fpm
+  systemctl start php-fpm
+  ```
+- Note: Attempt to enable/start `php` service failed because no standalone `php.service` exists; use `php-fpm`.
+
+### Apache Configuration and Restart
+- Edited Apache’s main configuration file:
+  ```
+  vi /etc/httpd/conf/httpd.conf
+  ```
+- Restarted Apache to apply configuration changes:
+  ```
+  systemctl restart httpd
+  ```
+
+### Key Notes
+- On CentOS Stream 9, PHP 8.0 is installed from standard AppStream repositories by default.
+- PHP-FPM (FastCGI Process Manager) is used for handling PHP processes.
+- Apache must be restarted after PHP or configuration changes.
+- Use `php-fpm` for enabling/disabling PHP service, not `php.service`.
+
+***
+
+This covers the installation of PHP and related modules, enabling Apache and PHP-FPM services, and configuration updates on CentOS Stream 9 application servers.
+
+[1](https://tecadmin.net/how-to-install-php-on-centos-9/)
+[2](https://cloudspinx.com/how-to-install-php-on-centos-stream/)
+[3](https://wiki.crowncloud.net/?How_to_Install_PHP_8_2_in_CentOS_Stream_9)
+[4](https://infotechys.com/install-php-8-3-on-rhel-9-centos-9/)
+[5](https://linuxcapable.com/how-to-install-php-on-centos-stream/)
+[6](https://www.server-world.info/en/note?os=CentOS_Stream_9&p=php&f=5)
+[7](https://blog.remirepo.net/post/2024/12/18/Install-PHP-8.4-on-Fedora-RHEL-CentOS-Alma-Rocky-or-other-clone)
+[8](https://php.watch/articles/php-8.3-install-upgrade-on-fedora-rhel-el)
+[9](https://phoenixnap.com/kb/install-php-7-on-centos)
+[10](https://reintech.io/blog/install-php-8-centos-9)
