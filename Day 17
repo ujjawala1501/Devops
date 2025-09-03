@@ -1,0 +1,36 @@
+To create a PostgreSQL database user named kodekloud_tim with the password dCV3szSGNA, follow these steps:
+Connect to PostgreSQL: Access the PostgreSQL command-line interface (psql) as a superuser (e.g., postgres).
+Code
+
+    sudo -i -u postgres psql
+Create the user: Execute the CREATE USER command within the psql prompt.
+Code
+
+    CREATE USER kodekloud_tim WITH PASSWORD 'dCV3szSGNA';
+Exit psql.
+Code
+
+    \q
+
+To create a PostgreSQL database named kodekloud_db4 and grant full permissions to the user kodekloud_tim on this database, perform the following steps:
+Connect to PostgreSQL as a superuser (e.g., postgres user):
+Code
+
+    sudo -u postgres psql
+Create the user kodekloud_tim (if they don't already exist):
+Replace your_password_here with a strong password.
+Code
+
+    CREATE USER kodekloud_tim WITH ENCRYPTED PASSWORD 'your_password_here';
+Create the database kodekloud_db4.
+Code
+
+    CREATE DATABASE kodekloud_db4;
+Grant all privileges on the database kodekloud_db4 to the user kodekloud_tim: 
+Code
+
+    GRANT ALL PRIVILEGES ON DATABASE kodekloud_db4 TO kodekloud_tim;
+Exit the PostgreSQL prompt.
+Code
+
+    \q
