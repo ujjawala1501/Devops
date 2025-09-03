@@ -1,0 +1,12 @@
+Installation Steps
+Install MariaDB server package:
+
+text
+sudo dnf install mariadb-server -y   (SUDO YUM DID NOT WORK)
+This installs MariaDB server along with dependencies.
+
+Start and enable the MariaDB service:
+
+text
+sudo systemctl start mariadb
+sudo systemctl enable mariadb
