@@ -1,0 +1,219 @@
+Task: 
+xFusionCorp Industries is planning to host two static websites on their infra in Stratos Datacenter. The development of these websites is still in-progress, but we want to get the servers ready. Please perform the following steps to accomplish the task:
+a. Install httpd package and dependencies on app server 3.
+b. Apache should serve on port 3004.
+c. There are two website's backups /home/thor/official and /home/thor/cluster on jump_host. Set them up on Apache in a way that official should work on the link http://localhost:3004/official/ and cluster should work on link http://localhost:3004/cluster/ on the mentioned app server.
+d. Once configured you should be able to access the website using curl command on the respective app server, i.e curl http://localhost:3004/official/ and curl http://localhost:3004/cluster/
+*************************************************************
+FOR APP SERVER STEVEN:
+**********************************************************
+Here are clear and organized **notes** based on your session log:
+
+---
+
+## ✅ **Objective**
+
+Install and configure Apache on `stapp03` so that:
+
+* Apache runs on **port 3004**
+* Two sites are served:
+
+  * `/official/` → official site
+  * `/cluster/` → cluster site
+
+---
+
+## 🧑‍💻 **Steps Performed**
+
+### 1. **SSH into Target App Server**
+
+```bash
+ssh banner@stapp03.stratos.xfusioncorp.com
+```
+
+* Accepted SSH key (first-time login)
+* Logged in successfully
+
+---
+
+### 2. **Install Apache (httpd)**
+
+```bash
+sudo yum install httpd -y
+```
+
+* Provided `sudo` password
+* Installed httpd and dependencies (13 packages)
+
+---
+
+### 3. **Prepare Content for Websites**
+
+```bash
+cd /tmp
+mkdir official cluster
+mv index.html official/
+```
+
+* Created `/tmp/official` and `/tmp/cluster`
+* Moved sample `index.html` into both
+
+---
+
+### 4. **Move Content to Apache Root**
+
+```bash
+cd /var/www/html
+sudo mkdir official cluster
+sudo mv /tmp/official /var/www/html/official
+sudo mv /tmp/cluster /var/www/html/cluster
+```
+
+* Moved folders to the Apache document root
+
+#### Fixed nested folder issue:
+
+```bash
+sudo mv /var/www/html/official/official/index.html /var/www/html/official/
+sudo rmdir /var/www/html/official/official
+
+sudo mv /var/www/html/cluster/cluster/index.html /var/www/html/cluster/
+sudo rmdir /var/www/html/cluster/cluster
+```
+
+---
+
+### 5. **Fix Permissions**
+
+```bash
+sudo chown -R apache:apache /var/www/html/
+```
+
+* Ensures Apache can read content
+
+---
+
+### 6. **Configure Apache to Run on Port 3004**
+
+#### Edited Apache config file:
+
+```bash
+sudo vi /etc/httpd/conf/httpd.conf
+```
+
+* Changed `Listen 80` → `Listen 3004`
+
+---
+
+### 7. **Start and Enable Apache**
+
+```bash
+sudo systemctl start httpd
+sudo systemctl status httpd
+```
+
+* Apache started successfully
+* Confirmed it's listening on port **3004**
+* Minor warning: `ServerName` not set (can be ignored or fixed)
+
+---
+
+### 8. **Verify Setup**
+
+```bash
+curl http://localhost:3004/official/
+```
+
+**Output:**
+
+```html
+<h1>KodeKloud</h1>
+<p>This is a sample page for our official website</p>
+```
+
+```bash
+curl http://localhost:3004/cluster/
+```
+
+**Output:**
+
+```html
+<h1>KodeKloud</h1>
+<p>This is a sample page for our cluster website</p>
+```
+***********************************************************
+FOR HOST SERVER
+*******************************************************
+Here's a clean and concise set of **notes** based on your latest terminal session:
+
+---
+
+## 🧾 Notes: Copying Website Files to `stapp03`
+
+### 🎯 **Goal**
+
+Copy two HTML files (`index.html` for `official` and `cluster`) from the **Jump Host** to the `/tmp` directory on **`stapp03`**, as user `banner`.
+
+---
+
+### 🧑‍💻 **Steps Performed**
+
+#### ✅ 1. Copy `official` site file to `stapp03`
+
+```bash
+cd ~/official
+ls
+```
+
+* Confirmed `index.html` is present in `~/official`
+
+```bash
+scp ~/official/index.html banner@stapp03:/tmp
+```
+
+* First-time connection: accepted SSH key
+* Entered `banner`'s password
+* File `index.html` successfully copied to `/tmp` on `stapp03`
+
+---
+
+#### 🔍 2. Attempt to access `cluster` directory (minor typo attempts)
+
+```bash
+cd /cluster          # ❌ Failed: no such directory
+cdcluster            # ❌ Failed: invalid command
+cd cluster           # ❌ Failed: not in current path
+cd ..                # ✅ Go back one level
+cd cluster           # ✅ Success
+```
+
+---
+
+#### ✅ 3. Copy `cluster` site file to `stapp03`
+
+```bash
+cd ~/cluster
+ls
+```
+
+* Confirmed `index.html` is present in `~/cluster`
+
+```bash
+scp ~/cluster/index.html banner@stapp03:/tmp/cluster/
+```
+
+* Entered `banner`'s password
+* File `index.html` successfully copied to `/tmp/cluster/` on `stapp03`
+
+---
+
+## ✅ Summary
+
+| Action                       | Result                                           |
+| ---------------------------- | ------------------------------------------------ |
+| Copied `official/index.html` | ✅ Success to `/tmp` on `stapp03`                 |
+| Copied `cluster/index.html`  | ✅ Success to `/tmp/cluster` on `stapp03`         |
+| Minor command errors         | ❌ Typos and invalid paths, but corrected quickly |
+
+
+
