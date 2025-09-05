@@ -1,0 +1,202 @@
+
+
+# ✅ Task Summary: PHP App Setup on App Server 2 (`stapp02`)
+
+The Nautilus team wants to host a **PHP-based web application** using **NGINX** and **PHP-FPM 8.2**. Below are the requirements:
+
+---
+
+## 🔧 Task Requirements
+
+1. **Install NGINX** on `stapp02`.
+2. Configure NGINX to:
+
+   * Listen on **port `8093`**
+   * Set **document root** to `/var/www/html`
+3. **Install PHP-FPM 8.2**
+
+   * It must use **Unix socket** at `/var/run/php-fpm/default.sock`
+4. Configure **NGINX and PHP-FPM** to work together.
+5. Test using:
+
+   ```bash
+   curl http://stapp02:8093/index.php
+   ```
+
+Note: `index.php` and `info.php` already exist in `/var/www/html`. Do **not modify** them.
+
+---
+
+# ✅ Step-by-Step Solution
+
+---
+
+## 1. 🔐 SSH into the App Server 2
+
+From the **Jump Host**, connect to App Server 2:
+
+```bash
+ssh banner@stapp02
+```
+
+Switch to root:
+
+```bash
+sudo su -
+```
+
+---
+
+## 2. 🧱 Install NGINX
+
+Install NGINX using:
+
+```bash
+yum install nginx -y
+```
+
+---
+
+## 3. 🧠 Configure NGINX
+
+Edit the NGINX config file:
+
+```bash
+vi /etc/nginx/nginx.conf
+```
+
+### ✅ Update/Add the following server block inside `http { ... }`:
+
+```nginx
+server {
+    listen       8093;
+    listen       [::]:8093;
+    server_name  _;
+    root         /var/www/html;
+    index        index.php index.html;
+
+    location / {
+        try_files $uri $uri/ =404;
+    }
+
+    location ~ \.php$ {
+        include fastcgi_params;
+        fastcgi_pass unix:/var/run/php-fpm/default.sock;
+        fastcgi_index index.php;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+    }
+
+    error_page 404 /404.html;
+    location = /404.html {
+    }
+
+    error_page 500 502 503 504 /50x.html;
+    location = /50x.html {
+    }
+}
+```
+
+💡 **Tip:** Make sure the `index` and `location ~ \.php$` directives are correctly formatted (note the semicolons and no extra spaces).
+
+---
+
+## 4. 🐘 Install PHP-FPM 8.2
+
+### Enable Remi Repository:
+
+```bash
+dnf install -y https://rpms.remirepo.net/enterprise/remi-release-$(rpm -E %{rhel}).rpm
+dnf module reset php -y
+dnf module enable php:remi-8.2 -y
+```
+
+### Install PHP and PHP-FPM:
+
+```bash
+dnf install php php-fpm -y
+```
+
+---
+
+## 5. ⚙️ Configure PHP-FPM to Use Custom Socket
+
+Edit the PHP-FPM pool configuration:
+
+```bash
+vi /etc/php-fpm.d/www.conf
+```
+
+### Update the following lines:
+
+```ini
+listen = /var/run/php-fpm/default.sock
+user = nginx
+group = nginx
+```
+
+---
+
+## 6. 📁 Create the Socket Directory (if needed)
+
+```bash
+mkdir -p /var/run/php-fpm
+chown -R nginx:nginx /var/run/php-fpm
+```
+
+---
+
+## 7. ✅ Start and Enable Services
+
+```bash
+systemctl enable php-fpm --now
+systemctl enable nginx --now
+```
+
+If NGINX fails, run:
+
+```bash
+nginx -t   # to test config
+journalctl -xeu nginx.service   # to debug
+```
+
+---
+
+## 8. 🧪 Test the Setup
+
+From **Jump Host**, test with:
+
+```bash
+curl http://stapp02:8093/index.php
+```
+
+You should see:
+
+```
+Welcome to xFusionCorp Industries!
+```
+
+You can also test `info.php` if needed:
+
+```bash
+curl http://stapp02:8093/info.php
+```
+
+---
+
+# ✅ Summary of Key Commands
+
+| Action              | Command                                                                               |
+| ------------------- | ------------------------------------------------------------------------------------- |
+| SSH to server       | `ssh banner@stapp02`                                                                  |
+| Become root         | `sudo su -`                                                                           |
+| Install NGINX       | `yum install nginx -y`                                                                |
+| Install Remi repo   | `dnf install https://rpms.remirepo.net/enterprise/remi-release-$(rpm -E %{rhel}).rpm` |
+| Enable PHP 8.2      | `dnf module reset php -y && dnf module enable php:remi-8.2 -y`                        |
+| Install PHP-FPM     | `dnf install php php-fpm -y`                                                          |
+| Edit NGINX config   | `vi /etc/nginx/nginx.conf`                                                            |
+| Edit PHP-FPM config | `vi /etc/php-fpm.d/www.conf`                                                          |
+| Create socket dir   | `mkdir -p /var/run/php-fpm`                                                           |
+| Set ownership       | `chown -R nginx:nginx /var/run/php-fpm`                                               |
+| Start services      | `systemctl enable --now php-fpm nginx`                                                |
+| Test with curl      | `curl http://stapp02:8093/index.php`                                                  |
+
