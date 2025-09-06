@@ -1,0 +1,117 @@
+Sure! Here's a shortened, bullet-point version of your DevOps tasks and scenarios:
+
+---
+
+### ✅ **Day 1: Git Setup on Storage Server**
+
+* SSH into the Storage Server
+* Install Git using `yum`
+* Initialize a **bare Git repo** at `/opt/demo.git`
+* Ensure it's ready for collaboration/version tracking
+
+---
+
+### ✅ **Day 2: Clone Existing Bare Repository**
+
+* Clone `/opt/games.git`
+* Target directory: `/usr/src/kodekloudrepos/games`
+* Ensure it's on the **same server**
+
+---
+
+### ✅ **Day 3: Forking via Gitea (Dev Onboarding)**
+
+* Use Gitea UI to **fork a repository**
+* Simulate new developer (Jon) joining a project
+* Set up repo access and structure for collaboration
+
+---
+
+Let me know if you'd like these in a table or as part of a DevOps diary/journal format!
+
+Sure! Here's a professional and engaging **LinkedIn post** covering all three tasks, tailored to **CentOS 9** and **Git**, with a solution-oriented tone that reflects real-world DevOps practices.
+
+---
+
+### 🚀 100 Days of DevOps – Days 21–23: Git Fundamentals on CentOS 9
+
+Over the past few days, I focused on building version control infrastructure with Git on **CentOS Stream 9**, simulating real-world DevOps scenarios that are core to CI/CD pipelines and team collaboration.
+
+Here’s a quick breakdown of what I worked on:
+
+---
+
+### ✅ **Day 21: Git Setup & Bare Repository Initialization**
+
+🛠️ **Objective**: Set up a dedicated Git repository for a new application.
+
+🔹 **Steps**:
+
+* SSH into the **Storage Server**
+* Install Git:
+
+  ```bash
+  sudo dnf install git -y
+  ```
+* Initialize a **bare Git repo** for centralized collaboration:
+
+  ```bash
+  git init --bare /opt/demo.git
+  ```
+
+🔁 This acts as the “central source of truth” for remote pushes/pulls.
+
+---
+
+### ✅ **Day 22: Cloning an Existing Bare Repository**
+
+🛠️ **Objective**: Clone an internal Git repo (`/opt/games.git`) into a working directory.
+
+🔹 **Steps**:
+
+* Ensure the directory `/usr/src/kodekloudrepos/games` exists:
+
+  ```bash
+  sudo mkdir -p /usr/src/kodekloudrepos/games
+  ```
+* Clone the repo:
+
+  ```bash
+  git clone /opt/games.git /usr/src/kodekloudrepos/games
+  ```
+
+🔄 This provides developers with a working copy of the project.
+
+---
+
+### ✅ **Day 23: Forking a Repo via Gitea (Developer Onboarding)**
+
+🛠️ **Objective**: Simulate a developer (Jon) joining a team and forking a project repo.
+
+🔹 **Steps**:
+
+* Access Gitea via web UI (self-hosted Git server)
+* Log in as **Jon**
+* Navigate to the project repository
+* Click **Fork** to create a personal copy under Jon’s namespace
+
+🔧 This is a crucial part of onboarding and Git-based collaboration workflows (especially for PRs).
+
+---
+
+### 💡 **Key Takeaways**
+
+* Git is foundational to any DevOps workflow
+* Bare repositories help centralize collaboration
+* Tools like Gitea simplify self-hosted Git operations
+* CentOS 9 works smoothly with Git for server-side setups
+
+---
+
+🔗 Always good to revisit the basics — they form the backbone of scalable DevOps practices.
+
+\#DevOps #100DaysOfDevOps #Git #CentOS9 #Gitea #CI #VersionControl #DevOpsJourney #Linux #OpenSource #KodeKloud #DevOpsLife
+
+---
+
+Let me know if you'd like a version with images or hashtags customized for reach!
