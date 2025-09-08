@@ -1,0 +1,106 @@
+The xFusionCorp development team added updates to the project that is maintained under /opt/apps.git repo and cloned under /usr/src/kodekloudrepos/apps. Recently some changes were made on Git server that is hosted on Storage server in Stratos DC. The DevOps team added some new Git remotes, so we need to update remote on /usr/src/kodekloudrepos/apps repository as per details mentioned below:
+a. In /usr/src/kodekloudrepos/apps repo add a new remote dev_apps and point it to /opt/xfusioncorp_apps.git repository. 
+b. There is a file /tmp/index.html on same server; copy this file to the repo and add/commit to master branch. 
+c. Finally push master branch to this new remote origin.
+---
+
+### 🔍 **What is the task actually asking?**
+
+You're working on a Linux server where a Git project (some code) is already cloned (downloaded) at:
+
+```
+/usr/src/kodekloudrepos/apps
+```
+
+There’s also a **central Git repository** at:
+
+```
+/opt/xfusioncorp_apps.git
+```
+
+You need to:
+
+1. **Link** the local project to this central Git repository (as a *new remote* called `dev_apps`).
+2. **Add a new file** (`/tmp/index.html`) to the project.
+3. **Commit and push** this new file to the central Git repository (`dev_apps`).
+
+---
+
+### ✅ **What is a "remote"?**
+
+Think of your local project like your notebook, and the remote is like a shared Google Doc. If you want to share what you wrote, you "push" it to the shared doc.
+
+Git "remotes" are links to these shared repositories. The usual one is called `origin`, but you can have others with different names like `dev_apps`.
+
+---
+
+### 💡**Now let’s break it down step by step:**
+
+---
+
+### 🧩 Step-by-step solution
+
+#### **Step 1: Go to the local project directory**
+
+This is where the Git repo is already cloned.
+
+```bash
+cd /usr/src/kodekloudrepos/apps
+```
+
+---
+
+#### **Step 2: Add a new Git remote called `dev_apps`**
+
+You are telling Git: “Hey, I also want to connect this project to another remote repo over here.”
+
+```bash
+git remote add dev_apps /opt/xfusioncorp_apps.git
+```
+
+📝 Now your local Git project knows about a second remote called `dev_apps`.
+
+---
+
+#### **Step 3: Copy the file `/tmp/index.html` into the Git project**
+
+```bash
+cp /tmp/index.html .
+```
+
+This puts the file into the current directory (the Git repo).
+
+---
+
+#### **Step 4: Add the file to Git tracking**
+
+```bash
+git add index.html
+```
+
+This tells Git: "Hey, I'm planning to include this file in the next commit."
+
+---
+
+#### **Step 5: Commit the changes**
+
+```bash
+git commit -m "Add index.html file"
+```
+
+This saves the change in your local Git history with a message.
+
+---
+
+#### **Step 6: Push the changes to the new remote (dev\_apps)**
+
+```bash
+git push dev_apps master
+```
+
+You're saying: “Send my local `master` branch to the `dev_apps` remote.”
+
+
+> You're taking a local project, linking it to another Git server, adding a new file to that project, and then pushing that change to the server so others can see it too.
+
+Let me know if you want to practice with dummy commands or if you're doing this in a lab.
