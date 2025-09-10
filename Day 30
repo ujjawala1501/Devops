@@ -173,4 +173,37 @@ sudo git push -f origin master
 ✅ Learned a LOT about Git internals and handling real-world Git errors
 
 ---
+🌟 Pro Tip
 
+You can also limit or customize what git log shows:
+git log --oneline --all
+git log --since="2 weeks ago"
+git log --author="Admin"
+
+*********************************
+👇 Why git log Showed Only a Few Commits
+
+When you ran:
+
+git log
+
+
+It probably showed only 5-6 commits because:
+
+Git paginates the output using a built-in pager (usually less)
+
+You were likely still inside the pager, and exited it (by pressing q) before scrolling further
+
+✅ How to View the Rest of the Commits
+
+When inside git log (in the pager), use these navigation keys:
+
+↓ or Enter → Scroll down one line
+
+Space → Scroll down one page
+
+b → Scroll up one page
+
+/search-term → Search commits
+
+q → Quit and return to shell
