@@ -1,0 +1,176 @@
+
+### 💡 Git Lesson Learned: Resetting Git History the Right Way
+
+Recently, I worked on a task involving Git history cleanup on a remote server for a test repository used by the Nautilus team. The objective was to **reset the commit history** of the repository so that only two specific commits remain:
+
+1. `initial commit`
+2. `add data.txt file`
+
+Here’s how I approached it (and what I learned along the way):
+
+---
+
+### ✅ Step-by-Step Execution
+
+#### 1️⃣ SSH into the storage server
+
+```bash
+ssh natasha@ststor01.stratos.xfusioncorp.com
+```
+
+> I confirmed the authenticity of the host when prompted and logged in successfully.
+
+---
+
+#### 2️⃣ Navigated to the repo
+
+```bash
+cd /usr/src/kodekloudrepos/demo
+```
+
+---
+
+#### 3️⃣ Checked Git version (small typo at first)
+
+I initially used:
+
+```bash
+git -version
+```
+
+🛑 **Mistake**: `-version` is incorrect.
+
+✅ Correct command:
+
+```bash
+git --version
+```
+
+---
+
+#### 4️⃣ Tried running `git blog` (another typo!)
+
+```bash
+git blog
+```
+
+🛑 **Mistake**: There's no `blog` command in Git.
+
+✅ Correct command was `git log`:
+
+```bash
+git log
+```
+
+> Shows commit history in detail.
+
+---
+
+#### 5️⃣ Saw an error related to "dubious ownership"
+
+```bash
+git branch
+```
+
+🛑 **Error**:
+
+```bash
+fatal: detected dubious ownership in repository
+```
+
+✅ Fix:
+
+```bash
+git config --global --add safe.directory /usr/src/kodekloudrepos/demo
+```
+
+> This marks the repo as safe to use in Git (common in shared environments).
+
+---
+
+#### 6️⃣ Verified branches and history
+
+```bash
+git branch
+git log --oneline
+```
+
+> I identified the **commit hashes** I needed:
+
+* `c7f2bed` → "add data.txt file"
+* `54760a1` → "initial commit"
+
+---
+
+#### 7️⃣ Attempted incorrect `git reset` syntax
+
+🛑 I tried this (wrong syntax):
+
+```bash
+git reset --soft <c7f2bed>
+```
+
+🧠 **Mistake**: I incorrectly used `< >` which is *not* valid in shell. It's just used to indicate placeholders in documentation.
+
+✅ Correct command:
+
+```bash
+git reset --hard c7f2bed
+```
+
+> I used `--hard` to reset both HEAD and the working directory to that specific commit. Then I went further back to initial commit too:
+
+```bash
+sudo git reset --hard 54760a1
+```
+
+Then moved forward again:
+
+```bash
+sudo git reset --hard c7f2bed
+```
+
+Now the commit history was:
+
+```bash
+git log --oneline
+```
+
+```
+c7f2bed add data.txt file
+54760a1 initial commit
+```
+
+Exactly what I needed ✅
+
+---
+
+#### 8️⃣ Final step: Force push to remote repo
+
+```bash
+sudo git push -f origin master
+```
+
+> `-f` (force) is required because the local history has diverged from the remote. This **overwrites** the remote history with your local version — so always use with caution.
+
+---
+
+### 📌 Key Takeaways
+
+* ⚠️ Never use `< >` literally in shell commands
+* `git reset --hard <commit>` moves both HEAD and the working directory to the desired commit
+* Always use `git log --oneline` for a cleaner view when navigating commit histories
+* When rewriting Git history, always **double-check commit hashes** before pushing
+* You may need to configure a directory as “safe” if you're working in a shared environment
+
+---
+
+### 🚀 Outcome
+
+✅ Repository was successfully cleaned
+✅ Only the two desired commits remained
+✅ Changes were force-pushed to remote
+✅ Learned a LOT about Git internals and handling real-world Git errors
+
+---
+
